@@ -34,12 +34,12 @@ public class MainActivity extends AppCompatActivity {
             params.put("params", encryptByte);  // 加密的参数串
         } catch (Exception e) {
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(new String[]{READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE},10086);
-        }
-//        File file = new File("/storage/emulated/0/屏保.mp4");
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            requestPermissions(new String[]{READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE},10086);
+//        }
+//        File file = new File("/storage/emulated/0/UVFQbGF5ZXLlsY_kv50ubXA0.mp4");
 //        try {
-//            EncryptionUtils.entrypt(file, 10086);
+//            EncryptionUtils.randomAccessEncryption(file, 10086);
 //            Log.e("加密", "加密完成");
 //        } catch (IOException e) {
 //            Log.e("异常", "出错了" + e);
