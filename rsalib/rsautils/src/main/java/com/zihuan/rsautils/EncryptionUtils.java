@@ -3,6 +3,9 @@ package com.zihuan.rsautils;
 import android.util.Base64;
 import android.util.Log;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.security.MessageDigest;
 
 public class EncryptionUtils {
@@ -92,7 +95,6 @@ public class EncryptionUtils {
             }
             return new String(buf);
         } catch (Exception e) {
-            // TODO: handle exception
             return null;
         }
     }
@@ -100,6 +102,7 @@ public class EncryptionUtils {
 
     /**
      * 编码
+     *
      * @param m
      * @return
      */
@@ -109,6 +112,7 @@ public class EncryptionUtils {
 
     /**
      * 解码
+     *
      * @param m
      * @return
      */
@@ -116,4 +120,32 @@ public class EncryptionUtils {
         return new String(Base64.encode(m.getBytes(), Base64.DEFAULT));
     }
 
+    /**
+     * RandomAccessFile 文件加密/解密
+     * 再执行一遍是解密
+     * 目前来说安全性并不是特别高,之后会优化成进行前中后三段加密
+     * @param file
+     * @param key
+     * @throws IOException
+     */
+    public static void randomAccessEncryption(File file, int key) throws IOException {
+        /**
+         * 从文件读取一个字节值，对key异或后再写回到文件
+         */
+        RandomAccessFile raf = new RandomAccessFile(file, "rw");
+        byte[] buff = new byte[8192];// 8192 8k是最佳值
+        int n;// 保存每一批的数量,每一批有n个
+        while ((n = raf.read(buff)) != -1) {
+            // 对数组前n个字节值加密
+            for (int i = 0; i < n; i++) {
+                buff[i] ^= key;
+            }
+            // 下标前移n个位置
+            raf.seek(raf.getFilePointer() - n);
+            // 数组中前n个字节，一批写回文件
+            raf.write(buff, 0, n);
+        }
+
+        raf.close();
+    }
 }
